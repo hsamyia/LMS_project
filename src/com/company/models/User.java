@@ -37,7 +37,6 @@ public class User {
     public void setLevel(int level) {
         this.level = level;
     }
-
     @Override
     public String toString() {
         return "User{" +

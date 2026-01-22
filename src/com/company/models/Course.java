@@ -7,7 +7,7 @@ public class Course {
     private int enrolled;
     private int difficulty;
 
-    public Course() {}
+
 
     public Course(String title, int capacity, int enrolled) {
         this.title = title;
