@@ -10,3 +10,4 @@ public interface IUserRepository {
     int getUserLevel(int userId);
 }
 
+

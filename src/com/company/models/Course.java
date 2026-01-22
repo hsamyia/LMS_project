@@ -40,3 +40,4 @@ public class Course {
         this.difficulty = difficulty;
     }
 }
+
