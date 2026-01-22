@@ -27,6 +27,7 @@ public class UserController implements IUserController {
         User user = repo.getUser(id);
         return user == null ? "User not found!" : user.toString();
     }
+
     @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();

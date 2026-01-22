@@ -86,6 +86,7 @@ public class UserRepository implements IUserRepository {
             return false;
         }
     }
+
     @Override
     public int getUserLevel(int userId) {
         try (Connection con = db.getConnection()) {
