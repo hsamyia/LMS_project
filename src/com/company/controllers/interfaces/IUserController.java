@@ -6,4 +6,3 @@ public interface IUserController {
     String getAllUsers();
     String updateUser(int id, String name, String surname, String gender);
 }
-

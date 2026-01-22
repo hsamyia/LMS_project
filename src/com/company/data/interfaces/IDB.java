@@ -6,4 +6,3 @@ public interface IDB {
     void close();
 }
 
-

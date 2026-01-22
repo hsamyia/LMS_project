@@ -29,7 +29,6 @@ public class UserController implements IUserController {
     }
 
 
-
     @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
