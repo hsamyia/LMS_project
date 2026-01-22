@@ -1,4 +1,5 @@
 package com.company;
+
 import com.company.controllers.CourseController;
 import com.company.controllers.UserController;
 import com.company.controllers.interfaces.IUserController;
@@ -27,3 +28,4 @@ public class Main {
         db.close();
     }
 }
+

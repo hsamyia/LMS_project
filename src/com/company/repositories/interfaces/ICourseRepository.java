@@ -1,5 +1,6 @@
 package com.company.repositories.interfaces;
 
+
 import com.company.models.Course;
 import java.util.List;
 
