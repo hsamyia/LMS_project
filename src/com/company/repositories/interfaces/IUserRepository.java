@@ -9,4 +9,3 @@ public interface IUserRepository {
     boolean updateUser(int id, String name, String surname, boolean gender);
     int getUserLevel(int userId);
 }
-

@@ -11,7 +11,6 @@ import com.company.repositories.interfaces.ICourseRepository;
 import com.company.repositories.interfaces.IUserRepository;
 
 public class Main {
-
     public static void main(String[] args) {
         IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "0000", "postgres");
 

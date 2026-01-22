@@ -12,4 +12,3 @@ public interface ICourseRepository {
     boolean enrollStudentInCourse(int userId, int courseId);
     List<Course> getCoursesByDifficulty(int difficulty);
 }
-

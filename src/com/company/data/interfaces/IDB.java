@@ -5,4 +5,3 @@ public interface IDB {
     Connection getConnection();
     void close();
 }
-
