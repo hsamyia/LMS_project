@@ -9,6 +9,7 @@ import com.company.repositories.CourseRepository;
 import com.company.repositories.UserRepository;
 import com.company.repositories.interfaces.ICourseRepository;
 import com.company.repositories.interfaces.IUserRepository;
+import com.company.services.AuthService;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,7 +21,8 @@ public class Main {
         ICourseRepository courseRepo = new CourseRepository(db);
         CourseController courseController = new CourseController(courseRepo, userRepo);
 
-        MyApplication app = new MyApplication(userController, courseController);
+        AuthService authService = AuthService.getInstance(db);
+        MyApplication app = new MyApplication(userController, courseController, authService);
 
         app.start();
 

@@ -44,6 +44,15 @@ public class UserController implements IUserController {
     public String updateUser(int id, String name, String surname, String gender) {
         boolean male = gender.equalsIgnoreCase("male");
         boolean updated = repo.updateUser(id, name, surname, male);
-        return updated ? "User updated successfully!" : "Update failed!";
+        return updated ? "*** User updated successfully! ***" : "*** Update failed! ***";
     }
+
+    @Override
+    public String blockUser(int id, boolean blocked) {
+        boolean success = repo.blockUser(id, blocked);
+        return success
+                ? (blocked ? "*** User blocked successfully! ***" : "*** User unblocked successfully! ***")
+                : "*** Operation failed! ***";
+    }
+
 }

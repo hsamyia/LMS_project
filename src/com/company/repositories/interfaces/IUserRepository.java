@@ -8,6 +8,7 @@ public interface IUserRepository {
     List<User> getAllUsers();
     boolean updateUser(int id, String name, String surname, boolean gender);
     int getUserLevel(int userId);
+    boolean blockUser(int id, boolean blocked);
 }
 
 

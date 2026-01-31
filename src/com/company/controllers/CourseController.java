@@ -43,7 +43,8 @@ public class CourseController {
         if (course.getEnrolled() >= course.getCapacity()) return "Course is full!";
         boolean enrolled = repo.enrollStudentInCourse(userId, courseId);
         if (!enrolled) return "User already enrolled in this course!";
-        repo.updateEnrolled(courseId, course.getEnrolled() + 1);
+        course.setEnrolled(course.getEnrolled() + 1);
+        repo.updateEnrolled(courseId, course.getEnrolled());
         return "Student enrolled successfully!";
     }
 

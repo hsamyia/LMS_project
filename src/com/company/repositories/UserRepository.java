@@ -11,7 +11,9 @@ import java.util.List;
 public class UserRepository implements IUserRepository {
     private final IDB db;
 
-    public UserRepository(IDB db) { this.db = db; }
+    public UserRepository(IDB db) {
+        this.db = db;
+    }
 
     @Override
     public boolean createUser(User user) {
@@ -99,6 +101,20 @@ public class UserRepository implements IUserRepository {
         }
         return -1;
     }
+    @Override
+    public boolean blockUser(int id, boolean blocked) {
+        try (Connection con = db.getConnection()) {
+            String sql = "UPDATE users SET blocked=? WHERE id=?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setBoolean(1, blocked);
+            st.setInt(2, id);
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
 
 

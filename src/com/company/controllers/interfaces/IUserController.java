@@ -5,6 +5,7 @@ public interface IUserController {
     String getUser(int id);
     String getAllUsers();
     String updateUser(int id, String name, String surname, String gender);
+    String blockUser(int id, boolean blocked);
 }
 
 

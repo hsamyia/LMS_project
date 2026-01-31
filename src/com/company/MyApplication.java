@@ -2,8 +2,10 @@ package com.company;
 
 import com.company.controllers.CourseController;
 import com.company.controllers.interfaces.IUserController;
+import com.company.models.AuthUser;
+import com.company.services.AuthService;
 
-import java.util.InputMismatchException;
+
 import java.util.Scanner;
 
 public class MyApplication {
@@ -11,11 +13,15 @@ public class MyApplication {
 
     private final IUserController userController;
     private final CourseController courseController;
+    private AuthUser currentUser;
+    private final AuthService authService;
 
-    public MyApplication(IUserController userController, CourseController courseController) {
+    public MyApplication(IUserController userController, CourseController courseController, AuthService authService) {
         this.userController = userController;
         this.courseController = courseController;
+        this.authService = authService;
     }
+
 
     private void mainMenu() {
         System.out.println("\n=== My Application ===");
@@ -27,11 +33,15 @@ public class MyApplication {
         System.out.println("6. Recommend courses for user");
         System.out.println("7. Create a new course");
         System.out.println("8. Show all courses");
+        if (currentUser.getRole().equals("ADMIN")) {
+            System.out.println("9. Block / Unblock user");
+        }
         System.out.println("0. Exit");
         System.out.print("Enter option(0-8): ");
     }
 
     public void start() {
+        loginMenu();
         while (true) {
             mainMenu();
             try {
@@ -45,13 +55,22 @@ public class MyApplication {
                     case 6: recommendCourseMenu(); break;
                     case 7: createCourseMenu(); break;
                     case 8: showAllCoursesMenu(); break;
+                    case 9:
+                        if (currentUser.getRole().equals("ADMIN")) {
+                            blockUserMenu();
+                        } else {
+                            System.out.println("Access denied");
+                        }
+                        break;
                     case 0: return;
                     default: System.out.println("Invalid option"); break;
                 }
 
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 System.out.println("Input must be integer");
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 System.out.println(e.getMessage());
             }
             System.out.println("*************************");
@@ -128,6 +147,55 @@ public class MyApplication {
 
     private void showAllCoursesMenu() {
         String response = courseController.getAllCourses();
+        System.out.println(response);
+    }
+
+    private void loginMenu() {
+        while (currentUser == null) {
+            System.out.println("1. Login");
+            System.out.println("2. Sign up");
+            System.out.print("Enter option (1-2): ");
+
+            int choice = Integer.parseInt(scanner.nextLine());
+
+
+
+
+            System.out.print("Username: ");
+            String username = scanner.nextLine();
+            System.out.print("Password: ");
+            String password = scanner.nextLine();
+
+            if (choice == 1) {
+                currentUser = authService.login(username, password);
+                if (currentUser == null) {
+                    System.out.println("*** Wrong username or password ***");
+                } else if (currentUser.isBlocked()) {
+                    System.out.println("*** You are blocked. ***");
+                    currentUser = null;
+                }
+            }
+            else {
+                System.out.print("Enter your existing user id: ");
+                int userId = Integer.parseInt(scanner.nextLine());
+
+                System.out.println(
+                        authService.signup(userId, username, password)
+                                ? "*** Signup completed successfully ***"
+                                : "*** Signup failed (check user id or username) ***"
+                );
+            }
+
+        }
+    }
+    private void blockUserMenu() {
+        System.out.print("Enter user id: ");
+        int id = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("*** Block user? (BLOCK / UNBLOCK): ");
+        boolean blocked = Boolean.parseBoolean(scanner.nextLine());
+
+        String response = userController.blockUser(id, blocked);
         System.out.println(response);
     }
 
