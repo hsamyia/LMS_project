@@ -68,6 +68,26 @@ public class CourseController {
         }
         return response.toString();
     }
+    public String getUserCourses(int userId) {
+        List<Course> courses = repo.getCoursesByUserId(userId);
+
+        if (courses.isEmpty()) {
+            return "User is not enrolled in any courses.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Courses for user #").append(userId).append(":\n");
+
+        for (Course c : courses) {
+            sb.append("ID: ").append(c.getId())
+                    .append(", Title: ").append(c.getTitle())
+                    .append(", Difficulty: ").append(c.getDifficulty())
+                    .append("\n");
+        }
+
+        return sb.toString();
+    }
+
 }
 
 

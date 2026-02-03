@@ -1,5 +1,6 @@
 package com.company.services;
 
+import com.company.data.PostgresDB;
 import com.company.data.interfaces.IDB;
 import com.company.models.AuthUser;
 
@@ -9,13 +10,17 @@ public class AuthService {
     private static AuthService instance;
     private final IDB db;
 
-    private AuthService(IDB db) {
-        this.db = db;
+    private AuthService() {
+        this.db = PostgresDB.getInstance();
     }
 
-    public static AuthService getInstance(IDB db) {
+    public static AuthService getInstance() {
         if (instance == null) {
-            instance = new AuthService(db);
+            synchronized (AuthService.class){
+                if (instance == null){
+                    instance = new AuthService();
+                }
+            }
         }
         return instance;
     }

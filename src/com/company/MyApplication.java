@@ -36,6 +36,7 @@ public class MyApplication {
         if (currentUser.getRole().equals("ADMIN")) {
             System.out.println("9. Block / Unblock user");
         }
+        System.out.println("10. Show user's enrolled courses");
         System.out.println("0. Exit");
         System.out.print("Enter option(0-8): ");
     }
@@ -62,6 +63,7 @@ public class MyApplication {
                             System.out.println("Access denied");
                         }
                         break;
+                    case 10: showUserCoursesMenu(); break;
                     case 0: return;
                     default: System.out.println("Invalid option"); break;
                 }
@@ -192,13 +194,20 @@ public class MyApplication {
         System.out.print("Enter user id: ");
         int id = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("*** Block user? (BLOCK / UNBLOCK): ");
+        System.out.print("*** Block user? (true / false): ");
         boolean blocked = Boolean.parseBoolean(scanner.nextLine());
 
         String response = userController.blockUser(id, blocked);
         System.out.println(response);
     }
 
+    private void showUserCoursesMenu() {
+        System.out.print("Enter user id: ");
+        int userId = Integer.parseInt(scanner.nextLine());
+
+        String response = courseController.getUserCourses(userId);
+        System.out.println(response);
+    }
 
 
 }

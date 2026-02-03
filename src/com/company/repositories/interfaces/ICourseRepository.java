@@ -13,4 +13,6 @@ public interface ICourseRepository {
     boolean updateEnrolled(int id, int newValue);
     boolean enrollStudentInCourse(int userId, int courseId);
     List<Course> getCoursesByDifficulty(int difficulty);
+    List<Course> getCoursesByUserId(int userId);
+
 }

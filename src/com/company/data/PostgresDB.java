@@ -7,15 +7,27 @@ import java.sql.SQLException;
 
 public class PostgresDB implements IDB {
 
+    private static volatile PostgresDB instance;
+
     private final String url;
     private final String user;
     private final String password;
     private Connection connection;
 
-    public PostgresDB(String url, String user, String password, String dbName) {
+    private PostgresDB(String url, String user, String password, String dbName) {
         this.url = url + "/" + dbName;
         this.user = user;
         this.password = password;
+    }
+    public static PostgresDB getInstance() {
+        if (instance == null) {
+            synchronized (PostgresDB.class){
+                if (instance == null) {
+                    instance= new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "0000", "postgres");
+                }
+            }
+        }
+        return instance;
     }
 
     @Override
@@ -40,7 +52,7 @@ public class PostgresDB implements IDB {
             System.out.println("Error closing DB connection");
         }
     }
-}
 
+}
 
 

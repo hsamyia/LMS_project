@@ -11,7 +11,9 @@ import java.util.List;
 public class CourseRepository implements ICourseRepository {
     private final IDB db;
 
-    public CourseRepository(IDB db) { this.db = db; }
+    public CourseRepository(IDB db) {
+        this.db = db;
+    }
 
     @Override
     public boolean createCourse(Course course) {
@@ -129,6 +131,34 @@ public class CourseRepository implements ICourseRepository {
         }
         return courses;
     }
+    @Override
+    public List<Course> getCoursesByUserId(int userId) {
+        List<Course> courses = new ArrayList<>();
+
+        try (Connection con = db.getConnection()) {
+            String sql = """
+            SELECT c.id, c.title, c.capacity, c.enrolled, c.difficulty FROM courses c JOIN enrollment e ON c.id = e.course_id JOIN users u ON u.id = e.user_id WHERE u.id = ? """;
+
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, userId);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                courses.add(new Course(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getInt("capacity"),
+                        rs.getInt("enrolled"),
+                        rs.getInt("difficulty")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
+        }
+
+        return courses;
+    }
+
 }
 
 
