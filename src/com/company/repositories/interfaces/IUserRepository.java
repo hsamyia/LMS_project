@@ -11,4 +11,3 @@ public interface IUserRepository {
     boolean blockUser(int id, boolean blocked);
 }
 
-
