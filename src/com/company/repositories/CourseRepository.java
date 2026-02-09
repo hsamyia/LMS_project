@@ -162,6 +162,7 @@ public class CourseRepository implements ICourseRepository {
                         rs.getString("category")
                 ));
             }
+
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
         }
