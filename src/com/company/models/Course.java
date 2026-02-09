@@ -54,4 +54,3 @@ public class Course {
         this.category = category;
     }
 }
-

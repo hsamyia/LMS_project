@@ -93,7 +93,6 @@ public class MyApplication {
         System.out.println(response);
     }
 
-
     private void createUserMenu() {
         System.out.print("Enter name: ");
         String name = scanner.nextLine();
