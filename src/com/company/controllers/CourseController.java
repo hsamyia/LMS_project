@@ -15,8 +15,9 @@ public class CourseController {
         this.userRepo = userRepo;
     }
 
-    public String createCourse(String title, int capacity, int difficulty) {
-        Course course = new Course(title, capacity, 0);
+    public String createCourse(String title, int capacity, int difficulty, String category) {
+        if(title.isEmpty() || category.isEmpty()) return "Title and category cannot be empty";
+        Course course = new Course(title, capacity, 0, category);
         course.setDifficulty(difficulty);
         boolean created = repo.createCourse(course);
         return created ? "Course is created!" : "Failed to create course.";
@@ -29,6 +30,7 @@ public class CourseController {
         for (Course c : courses) {
             sb.append("ID: ").append(c.getId())
                     .append(", Title: ").append(c.getTitle())
+                    .append(", Category: ").append(c.getCategory())
                     .append(", Capacity: ").append(c.getCapacity())
                     .append(", Enrolled: ").append(c.getEnrolled())
                     .append(", Difficulty: ").append(c.getDifficulty())
@@ -70,22 +72,36 @@ public class CourseController {
     }
     public String getUserCourses(int userId) {
         List<Course> courses = repo.getCoursesByUserId(userId);
-
-        if (courses.isEmpty()) {
-            return "User is not enrolled in any courses.";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Courses for user #").append(userId).append(":\n");
-
+        if (courses.isEmpty()) return "User is not enrolled in any courses.";
+        StringBuilder sb = new StringBuilder("Courses for user #" + userId + ":\n");
         for (Course c : courses) {
             sb.append("ID: ").append(c.getId())
                     .append(", Title: ").append(c.getTitle())
+                    .append(", Category: ").append(c.getCategory())
+                    .append(", Enrolled: ").append(c.getEnrolled())
                     .append(", Difficulty: ").append(c.getDifficulty())
                     .append("\n");
         }
-
         return sb.toString();
     }
+    public String getCoursesByCategory(String category) {
+        List<Course> courses = repo.getAllCourses().stream()
+                .filter(c -> c.getCategory().equalsIgnoreCase(category))
+                .toList();
+        if (courses.isEmpty()) return "No courses found in category: " + category;
+
+        StringBuilder sb = new StringBuilder("Courses in category: " + category + "\n");
+        for (Course c : courses) {
+            sb.append("ID: ").append(c.getId())
+                    .append(", Title: ").append(c.getTitle())
+                    .append(", Capacity: ").append(c.getCapacity())
+                    .append(", Enrolled: ").append(c.getEnrolled())
+                    .append(", Difficulty: ").append(c.getDifficulty())
+                    .append("\n");
+        }
+        return sb.toString();
+    }
+
+
 
 }

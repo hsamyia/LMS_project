@@ -37,8 +37,9 @@ public class MyApplication {
             System.out.println("9. Block / Unblock user");
         }
         System.out.println("10. Show user's enrolled courses");
+        System.out.println("11. Show courses by category");
         System.out.println("0. Exit");
-        System.out.print("Enter option(0-8): ");
+        System.out.print("Enter option(0-11): ");
     }
 
     public void start() {
@@ -64,6 +65,7 @@ public class MyApplication {
                         }
                         break;
                     case 10: showUserCoursesMenu(); break;
+                    case 11: showCoursesByCategoryMenu(); break;
                     case 0: return;
                     default: System.out.println("Invalid option"); break;
                 }
@@ -137,13 +139,15 @@ public class MyApplication {
 
     private void createCourseMenu() {
         System.out.print("Enter course title: ");
-        String title = scanner.nextLine();
+        String title = readNonEmptyString("Enter course title: ");
         System.out.print("Enter course capacity: ");
-        int capacity = Integer.parseInt(scanner.nextLine());
-        System.out.print("Enter course difficulty (1-5): ");
-        int difficulty = Integer.parseInt(scanner.nextLine());
+        int capacity = readInt("Enter course capacity (>0): ", 1, 1000);
+        System.out.print("Enter course difficulty (1-3): ");
+        int difficulty = readInt("Enter course difficulty (1-3): ", 1, 3);
+        System.out.print("Enter course category: ");
+        String category = readNonEmptyString("Enter course category: ");
 
-        String response = courseController.createCourse(title, capacity, difficulty);
+        String response = courseController.createCourse(title, capacity, difficulty, category);
         System.out.println(response);
     }
 
@@ -208,5 +212,39 @@ public class MyApplication {
         String response = courseController.getUserCourses(userId);
         System.out.println(response);
     }
+
+    private int readInt(String prompt, int min, int max) {
+        int value;
+        while (true) {
+            try {
+                System.out.print(prompt);
+                value = Integer.parseInt(scanner.nextLine());
+                if (value < min || value > max) {
+                    System.out.println("Value must be between " + min + " and " + max);
+                    continue;
+                }
+                return value;
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a valid number!");
+            }
+        }
+    }
+
+    private String readNonEmptyString(String prompt) {
+        String input;
+        do {
+            System.out.print(prompt);
+            input = scanner.nextLine().trim();
+        } while (input.isEmpty());
+        return input;
+    }
+    private void showCoursesByCategoryMenu() {
+        System.out.print("Enter category: ");
+        String category = scanner.nextLine();
+        String response = courseController.getCoursesByCategory(category);
+        System.out.println(response);
+    }
+
+
 
 }

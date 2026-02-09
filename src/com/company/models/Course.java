@@ -6,16 +6,22 @@ public class Course {
     private int capacity;
     private int enrolled;
     private int difficulty;
-
+    private String category;
 
     public Course(String title, int capacity, int enrolled) {
         this.title = title;
         this.capacity = capacity;
         this.enrolled = enrolled;
     }
+    public Course(String title, int capacity, int enrolled, String category) {
+        this.title = title;
+        this.capacity = capacity;
+        this.enrolled = enrolled;
+        this.category = category;
+    }
 
-    public Course(int id, String title, int capacity, int enrolled, int difficulty) {
-        this(title, capacity, enrolled);
+    public Course(int id, String title, int capacity, int enrolled, int difficulty, String category) {
+        this(title, capacity, enrolled, category);
         this.id = id;
         this.difficulty = difficulty;
     }
@@ -40,5 +46,11 @@ public class Course {
     }
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

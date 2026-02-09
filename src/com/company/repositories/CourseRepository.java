@@ -35,16 +35,19 @@ public class CourseRepository implements ICourseRepository {
     @Override
     public Course getCourse(int id) {
         try (Connection con = db.getConnection()) {
-            String sql = "SELECT id,title,capacity,enrolled,difficulty FROM courses WHERE id=?";
+            String sql = "SELECT id, title, capacity, enrolled, difficulty, category FROM courses WHERE id=?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return new Course(rs.getInt("id"),
+                return new Course(
+                        rs.getInt("id"),
                         rs.getString("title"),
                         rs.getInt("capacity"),
                         rs.getInt("enrolled"),
-                        rs.getInt("difficulty"));
+                        rs.getInt("difficulty"),
+                        rs.getString("category")
+                );
             }
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
@@ -56,15 +59,20 @@ public class CourseRepository implements ICourseRepository {
     public List<Course> getAllCourses() {
         List<Course> courses = new ArrayList<>();
         try (Connection con = db.getConnection()) {
-            String sql = "SELECT id,title,capacity,enrolled,difficulty FROM courses";
+            String sql = "SELECT id, title, capacity, enrolled, difficulty, category FROM courses";
+
+
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                courses.add(new Course(rs.getInt("id"),
+                courses.add(new Course(
+                        rs.getInt("id"),
                         rs.getString("title"),
                         rs.getInt("capacity"),
                         rs.getInt("enrolled"),
-                        rs.getInt("difficulty")));
+                        rs.getInt("difficulty"),
+                        rs.getString("category")
+                ));
             }
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
@@ -113,7 +121,8 @@ public class CourseRepository implements ICourseRepository {
     public List<Course> getCoursesByDifficulty(int difficulty) {
         List<Course> courses = new ArrayList<>();
         try (Connection con = db.getConnection()) {
-            String sql = "SELECT id,title,capacity,enrolled,difficulty FROM courses WHERE difficulty=?";
+            String sql = "SELECT id, title, capacity, enrolled, difficulty, category FROM courses WHERE difficulty=?";
+
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, difficulty);
             ResultSet rs = st.executeQuery();
@@ -123,7 +132,8 @@ public class CourseRepository implements ICourseRepository {
                         rs.getString("title"),
                         rs.getInt("capacity"),
                         rs.getInt("enrolled"),
-                        rs.getInt("difficulty")
+                        rs.getInt("difficulty"),
+                        rs.getString("category")
                 ));
             }
         } catch (SQLException e) {
@@ -134,29 +144,29 @@ public class CourseRepository implements ICourseRepository {
     @Override
     public List<Course> getCoursesByUserId(int userId) {
         List<Course> courses = new ArrayList<>();
-
         try (Connection con = db.getConnection()) {
-            String sql = """
-            SELECT c.id, c.title, c.capacity, c.enrolled, c.difficulty FROM courses c JOIN enrollment e ON c.id = e.course_id JOIN users u ON u.id = e.user_id WHERE u.id = ? """;
-
+            String sql = "SELECT c.id, c.title, c.capacity, c.enrolled, c.difficulty, c.category " +
+                    "FROM courses c " +
+                    "JOIN enrollment e ON c.id = e.course_id " +
+                    "WHERE e.user_id = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, userId);
             ResultSet rs = st.executeQuery();
-
             while (rs.next()) {
                 courses.add(new Course(
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getInt("capacity"),
                         rs.getInt("enrolled"),
-                        rs.getInt("difficulty")
+                        rs.getInt("difficulty"),
+                        rs.getString("category")
                 ));
             }
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
         }
-
         return courses;
     }
+
 
 }
