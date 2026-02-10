@@ -81,6 +81,7 @@ public class MyApplication {
         }
     }
 
+
     private void getAllUsersMenu() {
         String response = userController.getAllUsers();
         System.out.println(response);
