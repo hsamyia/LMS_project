@@ -28,7 +28,6 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Error shutting down DB");
         }
-
     }
 
 }
