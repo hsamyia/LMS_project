@@ -138,13 +138,10 @@ public class MyApplication {
     }
 
     private void createCourseMenu() {
-        System.out.print("Enter course title: ");
-        String title = readNonEmptyString("Enter course title: ");
-        System.out.print("Enter course capacity: ");
+        String title = readNonEmptyString("Enter course title:  ");
         int capacity = readInt("Enter course capacity (>0): ", 1, 1000);
-        System.out.print("Enter course difficulty (1-3): ");
+
         int difficulty = readInt("Enter course difficulty (1-3): ", 1, 3);
-        System.out.print("Enter course category: ");
         String category = readNonEmptyString("Enter course category: ");
 
         String response = courseController.createCourse(title, capacity, difficulty, category);
@@ -158,17 +155,28 @@ public class MyApplication {
 
     private void loginMenu() {
         while (currentUser == null) {
-            System.out.println("1. Login");
-            System.out.println("2. Sign up");
-            System.out.print("Enter option (1-2): ");
+            int choice;
+            while (true) {
+                System.out.println("1. Login");
+                System.out.println("2. Sign up");
+                System.out.print("Enter option (1-2): ");
 
-            int choice = Integer.parseInt(scanner.nextLine());
+                String input = scanner.nextLine();
+                try {
+                    choice = Integer.parseInt(input);
+                    if (choice == 1 || choice == 2) {
+                        break;
+                    } else {
+                        System.out.println("Please enter ONLY 1 or 2.");
+                    }
 
-
-
-
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input — enter a NUMBER (1 or 2).");
+                }
+            }
             System.out.print("Username: ");
             String username = scanner.nextLine();
+
             System.out.print("Password: ");
             String password = scanner.nextLine();
 
@@ -176,24 +184,34 @@ public class MyApplication {
                 currentUser = authService.login(username, password);
                 if (currentUser == null) {
                     System.out.println("*** Wrong username or password ***");
-                } else if (currentUser.isBlocked()) {
-                    System.out.println("*** You are blocked. ***");
+                }
+                else if (currentUser.isBlocked()) {
+                    System.out.println("*** You are blocked ***");
                     currentUser = null;
                 }
             }
-            else {
-                System.out.print("Enter your existing user id: ");
-                int userId = Integer.parseInt(scanner.nextLine());
 
+            else {
+                int userId;
+                while (true) {
+                    System.out.print("Enter your existing user id: ");
+                    try {
+                        userId = Integer.parseInt(scanner.nextLine());
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("User id must be a NUMBER!");
+                    }
+                }
+                boolean success = authService.signup(userId, username, password);
                 System.out.println(
-                        authService.signup(userId, username, password)
+                        success
                                 ? "*** Signup completed successfully ***"
                                 : "*** Signup failed (check user id or username) ***"
                 );
             }
-
         }
     }
+
     private void blockUserMenu() {
         System.out.print("Enter user id: ");
         int id = Integer.parseInt(scanner.nextLine());

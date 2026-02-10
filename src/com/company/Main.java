@@ -3,6 +3,7 @@ package com.company;
 import com.company.controllers.CourseController;
 import com.company.controllers.UserController;
 import com.company.controllers.interfaces.IUserController;
+import com.company.data.PostgresDB;
 import com.company.factories.RepositoryFactory;
 import com.company.repositories.interfaces.ICourseRepository;
 import com.company.repositories.interfaces.IUserRepository;
@@ -22,7 +23,11 @@ public class Main {
         MyApplication app = new MyApplication(userController, courseController, authService);
 
         app.start();
-
+        try {
+            PostgresDB.getInstance().close();
+        } catch (Exception e) {
+            System.out.println("Error shutting down DB");
+        }
     }
 
 }

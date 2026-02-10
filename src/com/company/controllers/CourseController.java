@@ -16,12 +16,16 @@ public class CourseController {
     }
 
     public String createCourse(String title, int capacity, int difficulty, String category) {
-        if(title.isEmpty() || category.isEmpty()) return "Title and category cannot be empty";
-        Course course = new Course(title, capacity, 0, category);
+        if(title.isEmpty() || category.isEmpty())
+            return "Title and category cannot be empty";
+        Course course = new Course(title, capacity, 0);
+
         course.setDifficulty(difficulty);
+        course.setCategory(category);
         boolean created = repo.createCourse(course);
         return created ? "Course is created!" : "Failed to create course.";
     }
+
 
     public String getAllCourses() {
         List<Course> courses = repo.getAllCourses();
@@ -61,13 +65,13 @@ public class CourseController {
         response.append("Recommended courses for user #").append(userId)
                 .append(" (Level: ").append(level).append("):\n");
 
-        for (Course course : courses) {
+        courses.forEach(course ->
             response.append("Course ID: ").append(course.getId())
                     .append(", Title: ").append(course.getTitle())
                     .append(", Capacity: ").append(course.getCapacity())
                     .append(", Enrolled: ").append(course.getEnrolled())
-                    .append("\n");
-        }
+                    .append("\n")
+        );
         return response.toString();
     }
     public String getUserCourses(int userId) {

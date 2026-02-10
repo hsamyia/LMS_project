@@ -18,12 +18,13 @@ public class CourseRepository implements ICourseRepository {
     @Override
     public boolean createCourse(Course course) {
         try (Connection con = db.getConnection()) {
-            String sql = "INSERT INTO courses(title, capacity, enrolled, difficulty) VALUES (?,?,?,?)";
+            String sql = "INSERT INTO courses(title, capacity, enrolled, difficulty, category) VALUES (?,?,?,?,?)";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, course.getTitle());
             st.setInt(2, course.getCapacity());
             st.setInt(3, course.getEnrolled());
             st.setInt(4, course.getDifficulty());
+            st.setString(5, course.getCategory());
             st.execute();
             return true;
         } catch (SQLException e) {

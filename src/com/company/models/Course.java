@@ -12,6 +12,7 @@ public class Course {
         this.title = title;
         this.capacity = capacity;
         this.enrolled = enrolled;
+        this.category = category;
     }
     public Course(String title, int capacity, int enrolled, String category) {
         this.title = title;
@@ -25,6 +26,7 @@ public class Course {
         this.id = id;
         this.difficulty = difficulty;
     }
+
 
     public int getId() {
         return id;
